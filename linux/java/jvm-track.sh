@@ -8,7 +8,7 @@ echo $filename
 #exit 0
 
 if [ $# -lt 1 ] ;then
-    echo "Usage: $0 java_pid " 
+    echo "Usage: $0 java_pid "
     exit 1
 fi
 
@@ -19,7 +19,7 @@ if [ $isjava -lt 1 ] ;then
     exit 1
 fi
 
-#################################################### 
+####################################################
 curday=`date "+%Y%m%d-%T"`
 filename=jvm-track-$1-$curday.log
 pid=$1
@@ -30,18 +30,18 @@ date |tee $filename
 
 # call java command with 1 option param
 # usage : callJC2P java_command command_option
-# example : callJC2P jstat gc gccapacity 
+# example : callJC2P jstat gc gccapacity
 function callJC2P
 {
   excutor=$1
-  shift  
+  shift
   echo '#######################################'|tee -a $filename
   echo $excutor |tee -a $filename
   echo ''|tee -a $filename
-  while [ $# -gt 0 ]; do 
+  while [ $# -gt 0 ]; do
     echo  |tee -a $filename
     echo $excutor -$1 $pid |tee -a $filename
-    $excutor -$1 $pid  |tee -a $filename 
+    $excutor -$1 $pid  |tee -a $filename
     shift
   done
 }
@@ -51,7 +51,7 @@ echo jinfo |tee -a $filename
 echo  |tee -a $filename
 jinfo $pid |tee -a $filename
 
- 
+
 # jstat
 callJC2P jstat gc gccapacity gccause gcnew gcnewcapacity gcold gcoldcapacity gcpermcapacity gcutil
 
@@ -59,7 +59,6 @@ callJC2P jstat gc gccapacity gccause gcnew gcnewcapacity gcold gcoldcapacity gcp
 callJC2P jmap heap histo dump:file=$pid.dump
 
 # jstack
-callJC2P jstack l F 
+callJC2P jstack l F
 jstack $pid|tee -a $filename
 #permstat
-
